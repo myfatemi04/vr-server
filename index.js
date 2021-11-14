@@ -6,8 +6,8 @@ const World = require('./world');
 
 const world = new World();
 world.emitUpdate = () => {
-	for (const callback of callbacks) {
-		callback(JSON.stringify(world.getState()));
+	for (const [id, callback] of callbacks) {
+		callback(JSON.stringify({ uid: id, users: world.users }));
 	}
 };
 
@@ -17,13 +17,16 @@ const server = new WebSocketServer({
 
 let nonce = 0;
 
+/**
+ * @type {Array<[uid: string, (data: string) => void]>}
+ */
 const callbacks = [];
 
 server.on('request', request => {
 	const conn = request.accept();
 	const id = 'user#' + nonce++;
 	world.addUser(id, id);
-	callbacks.push(message => conn.sendUTF(message));
+	callbacks.push([id, message => conn.sendUTF(message)]);
 	conn.on('message', message => {
 		if (message.type === 'utf8') {
 			try {
