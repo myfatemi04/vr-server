@@ -11,6 +11,9 @@ class World {
 			name,
 			x: 0,
 			y: 0,
+			rotation: {
+				y: 0,
+			},
 		};
 		this.emitUpdate();
 	}
@@ -28,6 +31,11 @@ class World {
 	updateUserPosition(id, x, y) {
 		this.users[id].x = x;
 		this.users[id].y = y;
+		this.emitUpdate();
+	}
+
+	updateUserRotation(id, y) {
+		this.users[id].rotation.y = y;
 		this.emitUpdate();
 	}
 }

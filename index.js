@@ -40,6 +40,8 @@ server.on('request', request => {
 						world.updateUserPosition(id, body.x, body.y);
 						console.log('Setting position of', id, 'to', body);
 						break;
+					case 'set-rotation':
+						world.updateUserRotation(id, body.y);
 				}
 			} catch (e) {
 				console.error(`client #${id}: ${e}`);
